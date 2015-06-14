@@ -54,10 +54,11 @@ class Puzzle:
 
 		return False
 	
-	def isComplete(self, grid):
-		for node in grid:
-			if node.value == None:
-				return False
+	def isComplete(self):
+		for i in range(9):
+			for j in range(9):
+				if self.puzzle[i][j].value == None:
+					return False
 		return True
 	
 	def alterAllDomains(self , grid):
@@ -110,16 +111,75 @@ class Puzzle:
 
 		return coords #returns [(x,y),(x1,y1)...] if there are multiple unassigned nodes with the least number of values in their domain
 
+	def getLeastConstrainedValue(self, rowIndex, colIndex):
+		domain = self.getDomain(rowIndex,colIndex)
+		if len (domain) ==1:
+			return domain
+		lc = []
+		for x in range(len(domain)):
+			count = 0 #counts the number of variables with domains containing this value (ie if assigned, these domains will all be altered)
+			v = domain[x]
+			for j in range(0,9):
+				if j != colIndex:
+					if v in self.getDomain(rowIndex,j):
+						count +=1
+			for i in range(0,9):
+				if i != rowIndex:
+					if v in self.getDomain(i,colIndex):
+						count +=1
+
+			boxR = int (math.floor(rowIndex/3) * 3 ) #row0-1's box will begin at row 0, row 3-5's box will begin at row 3. row 6-8's box will begin at row 6
+			boxC = int( math.floor(colIndex/3) * 3 ) #col0-1's box will begin at col 1...
+			for i in range(boxR, boxR+3): #check each row of the box
+				for j in range(boxC,boxC+3): #check each col of the box
+					if i == rowIndex and j == colIndex:
+						continue
+					else:
+						if v in self.getDomain(i,j):
+							count +=1
+			lc.append(count)
+
+		return [d for (lc,d) in sorted(zip(lc,domain))]
+
 	def backtracking(assignment, value, domain, rowIndex, colIndex):
 		if assignment.is_complete:
 			return 
 
 	def select_unassigned_variable(value, domain, rowIndex, colIndex):
 		return
-
+	def __repr__(self):
+		str= ""
+		for i in range(9):
+			s = ""
+			for j in range(9):
+				s+= "%5s " % self.puzzle[i][j].value
+			s += "\n --------- \n"
+			str+=s
+		return str
+import random
+def backtrack(grid):
+	if grid.isComplete():
+		return True
+	mostConstrainedCoords = grid.getMostConstrainedCoordinates()
+	if len(mostConstrainedCoords) >1:
+		random.shuffle(mostConstrainedCoords)
+	x,y= mostConstrainedCoords[0]
+	for d in grid.getLeastConstrainedValue(x,y):
+		puzzle = grid.puzzle
+		puzzle[x][y].value = d
+		if not grid.hasConflict(x,y):
+			grid.removeFromDomain(x,y,d)
+			grid.alterAllDomains(puzzle)
+			return backtrack(grid)
+		else:
+			puzzle[x][y].value = None #remove var=value from assignement 
+	return False
 
 p = Puzzle("test/sudoku_easy.txt")
 print p.getMostConstrainedCoordinates()
+result = backtrack(p)
+print result
+print p
 # print p.hasConflict(2,0)
 # p.removeFromDomain(2,0,7)
 # print p.puzzle
