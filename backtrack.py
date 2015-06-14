@@ -21,24 +21,32 @@ class Puzzle:
 						continue
 
 	def hasConflict(rowIndex, colIndex):
-		#Check alldiff in row:
-			priorValue = puzzle[rowIndex][0].value
-			for j in range(1,10):
-				if puzzle[rowIndex][j].value == priorValue:
-					return True
-				else:
-					priorValue = puzzle[rowIndex][j].value
+		val = self.puzzle[rowIndex][colIndex].value()
+		#Check no value in this row has the same value as this assignment:
+			for j in range(0,9):
+				if j != colIndex:
+					if self.puzzle[rowIndex][j].value == val:
+						return True
 
-		#Check alldiff in col:
-			priorValue = puzzle[0][colIndex].value
+		#Check no value in this column has the same value as this assignment:
 			for i in range(1,10):
-				if puzzle[i][colIndex].value == priorValue:
-					return True
-				else:
-					priorValue = puzzle[i][colIndex].value
+				if i != rowIndex:
+					if self.puzzle[i][colIndex].value == val:
+						return True
 
-		#Check alldiff in subsquare
-			boxR = math.floor(rowIndex/3) * 3 #row 5's box will begin at row 3
+		#Check no value in this subsquare has the same value as this assignment:
+			boxR = math.floor(rowIndex/3) * 3 #row0-1's box will begin at row 0, row 3-5's box will begin at row 3. row 6-8's box will begin at row 6
+			boxC = math.floor(colIndex/3) * 3 #col0-1's box will begin at col 1...
+			for i in range(boxR, boxR+3): #check each row of the box
+				for j in range(boxC,boxC+3): #check each col of the box
+					if i == rowIndex and j == colIndex:
+						continue
+					else:
+						if self.puzzle[i][j].value == val:
+							return True
+
+			return False
+
 
 
 p = Puzzle("test/sudoku_easy.txt")
