@@ -56,6 +56,11 @@ class Puzzle:
 
 		return False
 
+	def backtracking(assignment, value, domain, rowIndex, colIndex):
+		if assignment.is_complete:
+			return 
+
+	def select_unassigned_variable(value, domain, rowIndex, colIndex):
 
 
 p = Puzzle("test/sudoku_easy.txt")
