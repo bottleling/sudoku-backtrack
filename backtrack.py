@@ -156,6 +156,7 @@ class Puzzle:
 			s += "\n --------- \n"
 			str+=s
 		return str
+
 import random
 def backtrack(grid):
 	if grid.isComplete():
@@ -170,13 +171,13 @@ def backtrack(grid):
 		if not grid.hasConflict(x,y):
 			grid.removeFromDomain(x,y,d)
 			grid.alterAllDomains(puzzle)
-			return backtrack(grid)
+			if backtrack(grid): #if the path from this value fails, go to the next least constrained value
+				return True 
 		else:
 			puzzle[x][y].value = None #remove var=value from assignement 
 	return False
 
-p = Puzzle("test/sudoku_easy.txt")
-print p.getMostConstrainedCoordinates()
+p = Puzzle("test/sudoku_medium.txt")
 result = backtrack(p)
 print result
 print p
