@@ -1,6 +1,8 @@
 import math
 import time
 import copy
+import random
+
 class Node:
 	def __init__(self, value, domain):
 		self.value = value;
@@ -143,14 +145,9 @@ class Puzzle:
 
 		return [d for (lc,d) in sorted(zip(lc,domain))]
 
-	def backtracking(assignment, value, domain, rowIndex, colIndex):
-		if assignment.is_complete:
-			return 
-
-	def select_unassigned_variable(value, domain, rowIndex, colIndex):
-		return
 	def __repr__(self):
 		str= ""
+		
 		for i in range(9):
 			s = ""
 			for j in range(9):
@@ -158,8 +155,8 @@ class Puzzle:
 			s += "\n --------- \n"
 			str+=s
 		return str
+		
 
-import random
 def backtrack(grid):
 	if grid.isComplete():
 		return True
@@ -182,9 +179,9 @@ def backtrack(grid):
 			puzzle[x][y].value = None #remove var=value from assignement 
 	return False
 
-verbose = False
-runs = 10 
-files = ["test/sudoku_easy.txt", "test/sudoku_medium.txt", "test/sudoku_hard.txt"]
+verbose = 0 #True(1): display result of sudoku board; False(0): not display sudoku result board
+runs = 1	#it can set to any numerical value, in this case, each sudoku level only run one time
+files = ["test/sudoku_easy.txt", "test/sudoku_medium.txt", "test/sudoku_hard.txt", "test/sudoku_hardest.txt"]
 print "Parameters- Verbose: %s , Runs: %d" %(verbose, runs)
 for f in files:
 	correct =0.0
