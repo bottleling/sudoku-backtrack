@@ -1,5 +1,6 @@
 import math
 import time
+import copy
 class Node:
 	def __init__(self, value, domain):
 		self.value = value;
@@ -171,9 +172,12 @@ def backtrack(grid):
 		puzzle[x][y].value = d
 		if not grid.hasConflict(x,y):
 			grid.removeFromDomain(x,y,d)
+			puzzleCopy = copy.deepcopy(puzzle)
 			grid.alterAllDomains(puzzle)
 			if backtrack(grid): #if the path from this value fails, go to the next least constrained value
-				return True 
+				return True
+			else:
+				grid.puzzle = puzzleCopy
 		else:
 			puzzle[x][y].value = None #remove var=value from assignement 
 	return False
