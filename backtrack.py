@@ -1,4 +1,5 @@
 import math
+import time
 class Node:
 	def __init__(self, value, domain):
 		self.value = value;
@@ -177,11 +178,20 @@ def backtrack(grid):
 			puzzle[x][y].value = None #remove var=value from assignement 
 	return False
 
-p = Puzzle("test/sudoku_medium.txt")
-result = backtrack(p)
-print result
-print p
-# print p.hasConflict(2,0)
-# p.removeFromDomain(2,0,7)
-# print p.puzzle
-# print p.hasConflict(2,0)
+verbose = False
+runs = 10 
+files = ["test/sudoku_easy.txt", "test/sudoku_medium.txt", "test/sudoku_hard.txt"]
+print "Parameters- Verbose: %s , Runs: %d" %(verbose, runs)
+for f in files:
+	correct =0.0
+	times=0
+	for i in range(0,runs):
+		p = Puzzle(f)
+		t = time.time()
+		result = backtrack(p)
+		times += time.time() -t
+		if result:
+			correct +=1
+		if verbose:
+			print p
+	print "File: %s Proportion successful: %f Avg time: %f" %(f,correct/runs,times/runs)
