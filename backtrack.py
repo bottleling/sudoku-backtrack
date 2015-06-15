@@ -179,7 +179,7 @@ def backtrack(grid):
 			puzzle[x][y].value = None #remove var=value from assignement 
 	return False
 
-verbose = 0 #True(1): display result of sudoku board; False(0): not display sudoku result board
+verbose = True #True(1): display result of sudoku board; False(0): not display sudoku result board
 runs = 1	#it can set to any numerical value, in this case, each sudoku level only run one time
 files = ["test/sudoku_easy.txt", "test/sudoku_medium.txt", "test/sudoku_hard.txt", "test/sudoku_hardest.txt"]
 print "Parameters- Verbose: %s , Runs: %d" %(verbose, runs)
